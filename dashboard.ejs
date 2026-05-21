@@ -1,0 +1,82 @@
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Welcome back, <%= user.name.split(' ')[0] %> 👋</h1>
+    <p>Track your learning progress and continue where you left off</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="dashboard-layout">
+    <!-- Stats -->
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value"><%= enrolledCourses.length %></div>
+        <div class="stat-label">Enrolled Courses</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value"><%= enrolledCourses.reduce((a, c) => a + c.completed, 0) %></div>
+        <div class="stat-label">Lessons Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">
+          <% const scores = enrolledCourses.filter(c => c.avgScore !== null); %>
+          <%= scores.length > 0 ? Math.round(scores.reduce((a, c) => a + c.avgScore, 0) / scores.length) + '%' : '—' %>
+        </div>
+        <div class="stat-label">Avg Quiz Score</div>
+      </div>
+    </div>
+
+    <!-- My Courses -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>My Courses</h2>
+        <a href="/courses" class="link-arrow">Browse more →</a>
+      </div>
+
+      <% if (enrolledCourses.length === 0) { %>
+        <div class="empty-state">
+          <div class="empty-icon">🎓</div>
+          <h3>No courses yet</h3>
+          <p>Start your learning journey by enrolling in a course</p>
+          <a href="/courses" class="btn btn-primary">Browse Courses</a>
+        </div>
+      <% } else { %>
+        <div class="dashboard-courses">
+          <% enrolledCourses.forEach(({ course, progress, totalLessons, completed, percent, avgScore }) => { %>
+            <div class="dashboard-course-card">
+              <div class="dcc-icon" style="color: <%= course.color %>"><%= course.icon %></div>
+              <div class="dcc-body">
+                <h3><a href="/courses/<%= course.slug %>"><%= course.title %></a></h3>
+                <p class="dcc-instructor">by <%= course.instructor %></p>
+                <div class="dcc-progress">
+                  <div class="progress-bar-wrap">
+                    <div class="progress-bar-fill" style="width: <%= percent %>%; background: <%= course.color %>"></div>
+                  </div>
+                  <span><%= completed %> / <%= totalLessons %> lessons (<%= percent %>%)</span>
+                </div>
+                <% if (avgScore !== null) { %>
+                  <span class="quiz-badge">Quiz avg: <%= avgScore %>%</span>
+                <% } %>
+              </div>
+              <div class="dcc-actions">
+                <% const nextLesson = course.lessonList.find(l => !progress.completedLessons.includes(l.id)); %>
+                <% if (nextLesson) { %>
+                  <a href="/courses/<%= course.slug %>/learn/<%= nextLesson.id %>" class="btn btn-primary btn-sm">Continue</a>
+                <% } else { %>
+                  <span class="completed-badge">✅ Completed</span>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

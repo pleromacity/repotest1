@@ -1,0 +1,67 @@
+<%- include('partials/header', { title: 'Courses' }) %>
+
+<div class="page-header">
+  <div class="container">
+    <h1>All Courses</h1>
+    <p>Expand your skills with our expert-crafted courses</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="courses-toolbar">
+    <form method="GET" action="/courses" class="filter-form">
+      <input type="text" name="search" placeholder="Search courses..." value="<%= search || '' %>" class="search-input">
+      <select name="category" class="select-input">
+        <option value="">All Categories</option>
+        <option value="Programming" <%= category === 'Programming' ? 'selected' : '' %>>Programming</option>
+        <option value="Design" <%= category === 'Design' ? 'selected' : '' %>>Design</option>
+        <option value="Data Science" <%= category === 'Data Science' ? 'selected' : '' %>>Data Science</option>
+        <option value="Backend" <%= category === 'Backend' ? 'selected' : '' %>>Backend</option>
+      </select>
+      <select name="level" class="select-input">
+        <option value="">All Levels</option>
+        <option value="Beginner" <%= level === 'Beginner' ? 'selected' : '' %>>Beginner</option>
+        <option value="Intermediate" <%= level === 'Intermediate' ? 'selected' : '' %>>Intermediate</option>
+        <option value="Advanced" <%= level === 'Advanced' ? 'selected' : '' %>>Advanced</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Filter</button>
+      <a href="/courses" class="btn btn-outline">Reset</a>
+    </form>
+    <p class="results-count"><%= courses.length %> course<%= courses.length !== 1 ? 's' : '' %> found</p>
+  </div>
+
+  <% if (courses.length === 0) { %>
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <h3>No courses found</h3>
+      <p>Try different search terms or filters</p>
+      <a href="/courses" class="btn btn-primary">Clear Filters</a>
+    </div>
+  <% } else { %>
+    <div class="courses-grid courses-grid-wide">
+      <% courses.forEach(course => { %>
+        <a href="/courses/<%= course.slug %>" class="course-card">
+          <div class="course-card-icon" style="background: <%= course.color %>20; color: <%= course.color %>">
+            <%= course.icon %>
+          </div>
+          <div class="course-card-meta">
+            <span class="badge"><%= course.category %></span>
+            <span class="level level-<%= course.level.toLowerCase() %>"><%= course.level %></span>
+          </div>
+          <h3><%= course.title %></h3>
+          <p><%= course.description %></p>
+          <div class="tags">
+            <% course.tags.forEach(tag => { %><span class="tag">#<%= tag %></span><% }) %>
+          </div>
+          <div class="course-card-footer">
+            <span>👤 <%= course.instructor %></span>
+            <span>📚 <%= course.lessonList.length %> lessons</span>
+            <span>⏱ <%= course.duration %></span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

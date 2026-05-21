@@ -1,0 +1,80 @@
+<%- include('partials/header', { title: 'Home' }) %>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🎓 Learn Without Limits</div>
+    <h1>Master <em>new skills</em><br>at your own pace</h1>
+    <p>Expert-crafted courses in programming, design, and data science. Start learning today — completely free.</p>
+    <div class="hero-actions">
+      <a href="/courses" class="btn btn-primary btn-lg">Explore Courses</a>
+      <% if (!user) { %>
+        <a href="/auth/register" class="btn btn-ghost btn-lg">Create Free Account →</a>
+      <% } else { %>
+        <a href="/dashboard" class="btn btn-ghost btn-lg">My Dashboard →</a>
+      <% } %>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>4</strong><span>Courses</span></div>
+      <div class="stat"><strong>20+</strong><span>Lessons</span></div>
+      <div class="stat"><strong>Free</strong><span>Forever</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="float-card card-1">⚡ JS Fundamentals<br><small>4 lessons • Beginner</small></div>
+    <div class="float-card card-2">🎨 UI/UX Design<br><small>3 lessons • Intermediate</small></div>
+    <div class="float-card card-3">📊 Data Science<br><small>3 lessons • Advanced</small></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Featured Courses</h2>
+      <a href="/courses" class="link-arrow">View all courses →</a>
+    </div>
+    <div class="courses-grid">
+      <% courses.slice(0, 4).forEach(course => { %>
+        <a href="/courses/<%= course.slug %>" class="course-card">
+          <div class="course-card-icon" style="background: <%= course.color %>20; color: <%= course.color %>">
+            <%= course.icon %>
+          </div>
+          <div class="course-card-meta">
+            <span class="badge"><%= course.category %></span>
+            <span class="level level-<%= course.level.toLowerCase() %>"><%= course.level %></span>
+          </div>
+          <h3><%= course.title %></h3>
+          <p><%= course.description %></p>
+          <div class="course-card-footer">
+            <span>👤 <%= course.instructor %></span>
+            <span>⏱ <%= course.duration %></span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="container">
+    <h2>Why ELearn?</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">🎯</div>
+        <h3>Structured Learning</h3>
+        <p>Curated learning paths with hands-on exercises, quizzes, and real-world projects.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📈</div>
+        <h3>Track Progress</h3>
+        <p>Monitor your progress across all courses with detailed completion stats and quiz scores.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🏆</div>
+        <h3>Learn by Doing</h3>
+        <p>Every lesson ends with a quiz to reinforce key concepts and test your understanding.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

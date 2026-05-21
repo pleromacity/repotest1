@@ -1,0 +1,65 @@
+<%- include('partials/header', { title: course.title }) %>
+
+<div class="course-hero" style="--accent: <%= course.color %>">
+  <div class="container">
+    <div class="course-hero-inner">
+      <div class="course-hero-content">
+        <div class="course-hero-meta">
+          <span class="badge badge-light"><%= course.category %></span>
+          <span class="level level-<%= course.level.toLowerCase() %>"><%= course.level %></span>
+        </div>
+        <div class="course-hero-icon"><%= course.icon %></div>
+        <h1><%= course.title %></h1>
+        <p><%= course.longDescription %></p>
+        <div class="course-stats">
+          <span>👤 <%= course.instructor %></span>
+          <span>📚 <%= course.lessonList.length %> lessons</span>
+          <span>⏱ <%= course.duration %></span>
+        </div>
+        <% if (user) { %>
+          <% if (enrolled) { %>
+            <% const firstLesson = course.lessonList[0]; %>
+            <% const progress = userProgress || { completedLessons: [] }; %>
+            <% const pct = Math.round((progress.completedLessons.length / course.lessonList.length) * 100); %>
+            <div class="enroll-status">
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width: <%= pct %>%"></div>
+              </div>
+              <span><%= pct %>% complete</span>
+            </div>
+            <a href="/courses/<%= course.slug %>/learn/<%= firstLesson.id %>" class="btn btn-primary btn-lg">
+              <%= pct > 0 ? 'Continue Learning' : 'Start Learning' %> →
+            </a>
+          <% } else { %>
+            <form method="POST" action="/courses/<%= course.slug %>/enroll">
+              <button type="submit" class="btn btn-primary btn-lg">Enroll Free →</button>
+            </form>
+          <% } %>
+        <% } else { %>
+          <a href="/auth/register" class="btn btn-primary btn-lg">Sign Up to Enroll →</a>
+        <% } %>
+      </div>
+      <div class="course-hero-lessons">
+        <h3>Course Content</h3>
+        <ul class="lesson-list">
+          <% course.lessonList.forEach((lesson, i) => { %>
+            <li class="lesson-item">
+              <span class="lesson-num"><%= i + 1 %></span>
+              <div class="lesson-info">
+                <strong><%= lesson.title %></strong>
+                <span class="lesson-duration"><%= lesson.duration %></span>
+              </div>
+              <% if (enrolled && userProgress && userProgress.completedLessons.includes(lesson.id)) { %>
+                <span class="lesson-done">✓</span>
+              <% } else { %>
+                <span class="lesson-lock"><%= enrolled ? '▶' : '🔒' %></span>
+              <% } %>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
