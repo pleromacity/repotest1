@@ -1,11 +1,16 @@
 {
-    "name": "elearn",
+    "name": "generic-shopping-app",
     "version": "1.0.0",
+    "description": "A simple generic shopping Node.js app using Express and EJS.",
     "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
     "dependencies": {
-        "bcryptjs": "^2.4.3",
-        "ejs": "^3.1.9",
-        "express": "^4.18.2",
-        "express-session": "^1.17.3"
+        "express": "^4.18.4",
+        "ejs": "^3.1.9"
+    },
+    "engines": {
+        "node": ">=16"
     }
 }

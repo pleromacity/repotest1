@@ -1,47 +1,49 @@
 const express = require('express');
-const session = require('express-session');
 const path = require('path');
-
-const authRoutes = require('./routes/auth');
-const courseRoutes = require('./routes/courses');
-const dashboardRoutes = require('./routes/dashboard');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-  secret: 'elearn-secret-key-2024',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day
-}));
+const products = [
+    { id: 1, name: 'Classic T-Shirt', price: 19.99, description: 'A comfortable everyday tee.' },
+    { id: 2, name: 'Wireless Headphones', price: 79.99, description: 'Noise-reducing over-ear headphones.' },
+    { id: 3, name: 'Coffee Mug', price: 12.5, description: 'Ceramic mug for your favorite drink.' },
+    { id: 4, name: 'Backpack', price: 49.99, description: 'Durable backpack for work or travel.' }
+];
 
-// Make user available in all views
-app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
-  next();
-});
-
-// Routes
-app.use('/auth', authRoutes);
-app.use('/courses', courseRoutes);
-app.use('/dashboard', dashboardRoutes);
+const cart = [];
 
 app.get('/', (req, res) => {
-  const { getCourses } = require('./data/courses');
-  const courses = getCourses();
-  res.render('home', { courses });
+    res.render('index', { products, cartCount: cart.length });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n🎓 ELearn running at http://localhost:${PORT}\n`);
+app.post('/cart/add', (req, res) => {
+    const { productId } = req.body;
+    const product = products.find((item) => item.id === Number(productId));
+    if (product) {
+        cart.push(product);
+    }
+    res.redirect('/cart');
+});
+
+app.get('/cart', (req, res) => {
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    res.render('cart', { cart, total });
+});
+
+app.post('/cart/remove', (req, res) => {
+    const { index } = req.body;
+    const idx = Number(index);
+    if (!Number.isNaN(idx) && idx >= 0 && idx < cart.length) {
+        cart.splice(idx, 1);
+    }
+    res.redirect('/cart');
+});
+
+app.listen(port, () => {
+    console.log(`Shopping app running at http://localhost:${port}`);
 });
