@@ -2,12 +2,17 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f4f4f4;
+    /* Subtle "rays of red" background using conic & radial gradients */
+    background:
+        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 35%, rgba(255, 230, 230, 0.6) 60%, rgba(255, 230, 230, 0.2) 80%),
+        repeating-conic-gradient(from 0deg at 50% 10%, rgba(196, 0, 0, 0.06) 0deg 8deg, rgba(255, 255, 255, 0.02) 8deg 16deg),
+        #fff;
     color: #333;
+    background-attachment: fixed;
 }
 
 header {
-    background: #0070f3;
+    background: linear-gradient(90deg, #b30000, #d32f2f);
     color: #fff;
     padding: 1rem;
     text-align: center;
@@ -37,7 +42,7 @@ header {
 }
 
 button {
-    background: #0070f3;
+    background: #c62828;
     color: #fff;
     border: none;
     padding: 0.75rem 1rem;
@@ -46,7 +51,7 @@ button {
 }
 
 button:hover {
-    background: #0051a8;
+    background: #8e0000;
 }
 
 .cart-summary {
