@@ -11,7 +11,7 @@
                         <li>
                             <span><strong>
                                     <%= item.name %>
-                                </strong> — $<%= item.price.toFixed(2) %></span>
+                                </strong> — £<%= item.price.toFixed(2) %></span>
                             <form action="/cart/remove" method="post" style="margin:0;">
                                 <input type="hidden" name="index" value="<%= index %>" />
                                 <button type="submit">Remove</button>
@@ -21,7 +21,7 @@
                 </ul>
 
                 <div class="cart-summary">
-                    <p><strong>Total:</strong> $<%= total.toFixed(2) %>
+                    <p><strong>Total:</strong> £<%= total.toFixed(2) %>
                     </p>
                 </div>
                 <% } %>
